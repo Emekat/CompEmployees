@@ -6,6 +6,8 @@ namespace CompanyEmployees.ContextFactory
 {
 	public class RepositoryContextFactory : IDesignTimeDbContextFactory<RepositoryContext>
 	{
+		private const string AssemblyName = "CompanyEmployees.Infrastructure.Persistence";
+
 		public RepositoryContext CreateDbContext(string[] args)
 		{
 			var options = new ConfigurationBuilder()
@@ -15,7 +17,7 @@ namespace CompanyEmployees.ContextFactory
 
 			var builder = new DbContextOptionsBuilder<RepositoryContext>()
 				.UseSqlServer(options.GetConnectionString("sqlConnection"),
-					  b => b.MigrationsAssembly("CompanyEmployees.Infrastructure.Persistence"));
+					  b => b.MigrationsAssembly(AssemblyName));
 
 			return new RepositoryContext(builder.Options);
 
