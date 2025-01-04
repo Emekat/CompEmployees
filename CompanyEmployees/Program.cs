@@ -23,6 +23,7 @@ else
 }
 
 // Configure the HTTP request pipeline.
+app.UseCors("CorsPolicy");
 
 app.UseHttpsRedirection();
 
