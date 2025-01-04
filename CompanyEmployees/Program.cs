@@ -1,4 +1,5 @@
 using CompanyEmployees.Extensions;
+using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,9 +24,15 @@ else
 }
 
 // Configure the HTTP request pipeline.
-app.UseCors("CorsPolicy");
-
 app.UseHttpsRedirection();
+app.UseStaticFiles();
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+	ForwardedHeaders = ForwardedHeaders.All
+});
+
+
+
 
 app.UseAuthorization();
 
