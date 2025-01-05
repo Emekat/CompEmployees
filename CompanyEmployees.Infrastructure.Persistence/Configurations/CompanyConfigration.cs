@@ -13,6 +13,29 @@ namespace CompanyEmployees.Infrastructure.Persistence.Configurations
 	{
 		public void Configure(EntityTypeBuilder<Company> builder)
 		{
+			builder.ToTable("Companies");
+
+			builder.HasKey(c => c.Id);
+
+			builder.Property(c => c.Id)
+				.HasColumnName("CompanyId")
+				.IsRequired();
+
+			builder.Property(c => c.Name)
+				.HasMaxLength(60)
+				.IsRequired();
+
+			builder.Property(c => c.Address)
+				.HasMaxLength(60)
+				.IsRequired();
+
+			builder.Property(c => c.Country);
+
+			builder.HasMany(c => c.Employees)
+			  .WithOne(e => e.Company)
+			  .HasForeignKey(e => e.CompanyId)
+			  .OnDelete(DeleteBehavior.Cascade);
+
 			builder.HasData
 			(
 				new Company
