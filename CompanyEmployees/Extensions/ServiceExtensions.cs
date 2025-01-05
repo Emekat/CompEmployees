@@ -2,6 +2,7 @@
 using CompanyEmployees.Core.Services;
 using CompanyEmployees.Core.Services.Abstractions;
 using CompanyEmployees.Infrastructure.Persistence;
+using LoggingService;
 using Microsoft.EntityFrameworkCore;
 
 namespace CompanyEmployees.Extensions
@@ -25,6 +26,10 @@ namespace CompanyEmployees.Extensions
 			{
 
 			});
+		}
+		public static void ConfigureLoggerService(this IServiceCollection services)
+		{
+			services.AddSingleton<ILoggerManager, LoggerManager>();
 		}
 
 		public static void ConfigureRepositoryManager(this IServiceCollection services)
