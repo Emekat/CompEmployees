@@ -1,4 +1,7 @@
-﻿namespace CompanyEmployees.Extensions
+﻿using CompanyEmployees.Core.Domain.Repositories;
+using CompanyEmployees.Infrastructure.Persistence;
+
+namespace CompanyEmployees.Extensions
 {
 	public static class ServiceExtensions
 	{
@@ -19,6 +22,11 @@
 			{
 
 			});
+		}
+
+		public static void ConfigureRepositoryManager(this IServiceCollection services)
+		{
+			services.AddScoped<IRepositoryManager, RepositoryManager>();
 		}
 	}
 }
