@@ -1,7 +1,7 @@
 using CompanyEmployees.Extensions;
+using LoggingService;
 using Microsoft.AspNetCore.HttpOverrides;
 using Serilog;
-using System.Runtime.CompilerServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,16 +23,12 @@ builder.Host.UseSerilog((hostContext, configuration) =>
 
 var app = builder.Build();
 
+var logger = app.Services.GetRequiredService<ILoggerManager>();
+app.ConfigureExceptionHandler(logger);
 
-if (!app.Environment.IsDevelopment())
-{
-	app.UseExceptionHandler("/Error");
+if (app.Environment.IsProduction())
 	app.UseHsts();
-}
-else
-{
-	app.UseDeveloperExceptionPage();
-}
+
 
 // Configure the HTTP request pipeline.
 app.UseHttpsRedirection();
