@@ -5,6 +5,6 @@ namespace CompanyEmployees.Core.Domain.Repositories
 	public interface ICompanyRepository
 	{
 		IEnumerable<Company> GetAllCompanies(bool trackChanges);
-		Company GetCompany(Guid id, bool trackChanges);
+		Company? GetCompany(Guid id, bool trackChanges);
 	}
 }
