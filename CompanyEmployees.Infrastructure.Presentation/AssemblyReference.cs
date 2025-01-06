@@ -1,6 +1,5 @@
-﻿namespace CompanyEmployees.Infrastructure.Presentation
+﻿namespace CompanyEmployees.Infrastructure.Presentation;
+
+public static class AssemblyReference
 {
-	public static class AssemblyReference
-	{
-	}
 }

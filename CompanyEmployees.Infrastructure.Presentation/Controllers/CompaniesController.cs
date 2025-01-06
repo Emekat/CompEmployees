@@ -1,32 +1,23 @@
 ﻿using CompanyEmployees.Core.Services.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CompanyEmployees.Infrastructure.Presentation.Controllers
+namespace CompanyEmployees.Infrastructure.Presentation.Controllers;
+
+[Route("api/companies")]
+[ApiController]
+public class CompaniesController : ControllerBase
 {
-	[Route("api/companies")]
-	[ApiController]
-	public class CompaniesController : ControllerBase
+	private readonly IServiceManager _serviceManager;
+
+	public CompaniesController(IServiceManager serviceManager)
 	{
-		private readonly IServiceManager _serviceManager;
+		_serviceManager = serviceManager;
+	}
 
-		public CompaniesController(IServiceManager serviceManager)
-		{
-			_serviceManager = serviceManager;
-		}
-
-		[HttpGet]
-		public IActionResult GetCompanies()
-		{
-			try
-			{
-				var companies = _serviceManager.CompanyService.GetAllCompanies(trackChanges: false);
-				return Ok(companies);
-			}
-			catch
-			{
-				return StatusCode(500, "Internal server error");
-			}
-		
-		}
+	[HttpGet]
+	public IActionResult GetCompanies()
+	{
+		var companies = _serviceManager.CompanyService.GetAllCompanies(trackChanges: false);
+		return Ok(companies);
 	}
 }
