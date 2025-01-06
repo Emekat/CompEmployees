@@ -14,7 +14,7 @@ namespace CompanyEmployees.Infrastructure.Persistence.Repositories
 		   .OrderBy(c => c.Name)
 		   .ToList();
 
-		public Company? GetCompany(Guid id, bool trackChanges) =>
-			FindByCondition(c => c.Id.Equals(id), trackChanges).SingleOrDefault();
+		public Company? GetCompany(Guid companyId, bool trackChanges) =>
+			FindByCondition(c => c.Id.Equals(companyId), trackChanges).SingleOrDefault();
 	}
 }
