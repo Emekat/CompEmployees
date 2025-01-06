@@ -1,4 +1,5 @@
-﻿using LoggingService;
+﻿using CompanyEmployees.Core.Domain.Exceptions;
+using LoggingService;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -10,7 +11,12 @@ public class GlobalExceptionHandler(ILoggerManager _logger, IProblemDetailsServi
 	public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception,
 		CancellationToken cancellationToken)
 	{
-		httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+		httpContext.Response.StatusCode = exception switch
+		{
+			NotFoundException => StatusCodes.Status404NotFound,
+			_ => StatusCodes.Status500InternalServerError
+		};
+
 		httpContext.Response.ContentType = "application/json";
 
 		_logger.LogError($"Something went wrong: {exception.Message}");
