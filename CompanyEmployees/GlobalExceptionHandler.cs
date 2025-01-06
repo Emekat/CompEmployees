@@ -5,7 +5,7 @@ using System.Net;
 
 namespace CompanyEmployees;
 
-public class GlobalExceptionHandler(ILoggerManager _logger)  : IExceptionHandler
+public class GlobalExceptionHandler(ILoggerManager _logger, IProblemDetailsService _problemDetailsService)  : IExceptionHandler
 {
 	public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception,
 		CancellationToken cancellationToken)
@@ -15,13 +15,25 @@ public class GlobalExceptionHandler(ILoggerManager _logger)  : IExceptionHandler
 
 		_logger.LogError($"Something went wrong: {exception.Message}");
 
-		await httpContext.Response.WriteAsJsonAsync(new ProblemDetails
+		var problemDetails = new ProblemDetails
 		{
 			Title = "An error occurred",
 			Status = httpContext.Response.StatusCode,
 			Detail = exception.Message,
 			Type = exception.GetType().Name
+		};
+
+		var result = await _problemDetailsService.TryWriteAsync(new ProblemDetailsContext
+		{
+			HttpContext = httpContext,
+			ProblemDetails = problemDetails,
+			Exception = exception
 		});
+
+		if (!result)
+		{
+			await httpContext.Response.WriteAsJsonAsync(problemDetails);
+		}	
 		return true;
 	}
 }
