@@ -5,13 +5,8 @@ using System.Net;
 
 namespace CompanyEmployees;
 
-public class GlobalExceptionHandler : IExceptionHandler
+public class GlobalExceptionHandler(ILoggerManager _logger)  : IExceptionHandler
 {
-	private readonly ILoggerManager _logger;
-	public GlobalExceptionHandler(ILoggerManager logger)
-	{
-		_logger = logger;
-	}
 	public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception,
 		CancellationToken cancellationToken)
 	{
