@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CompanyEmployees.Core.Domain.Entities;
 
-namespace CompanyEmployees.Core.Domain.Repositories
+namespace CompanyEmployees.Core.Domain.Repositories;
+
+public interface IEmployeeRepository
 {
-	public interface IEmployeeRepository
-	{
-	}
+	IEnumerable<Employee> GetEmployees(Guid companyId, bool trackChanges);
 }

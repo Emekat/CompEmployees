@@ -1,10 +1,5 @@
 ﻿using CompanyEmployees.Core.Domain.Entities;
 using CompanyEmployees.Core.Domain.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CompanyEmployees.Infrastructure.Persistence.Repositories
 {
@@ -13,6 +8,14 @@ namespace CompanyEmployees.Infrastructure.Persistence.Repositories
 		public EmployeeRepository(RepositoryContext repositoryContext)
 			: base(repositoryContext)
 		{
+		}
+
+		public IEnumerable<Employee> GetEmployees(Guid companyId, bool trackChanges)
+		{
+			var employees = FindByCondition(e => e.CompanyId.Equals(companyId), trackChanges)
+				.OrderBy(e => e.Name)
+				.ToList();
+			return employees;
 		}
 	}
 }
