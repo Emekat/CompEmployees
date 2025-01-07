@@ -1,6 +1,7 @@
 ﻿using CompanyEmployees.Core.Domain.Repositories;
 using CompanyEmployees.Core.Services;
 using CompanyEmployees.Core.Services.Abstractions;
+using CompanyEmployees.CustomFormatters;
 using CompanyEmployees.Infrastructure.Persistence;
 using LoggingService;
 using Microsoft.EntityFrameworkCore;
@@ -46,5 +47,10 @@ public static class ServiceExtensions
 	{
 		services.AddDbContext<RepositoryContext>(opts => 
 		opts.UseSqlServer(configuration.GetConnectionString("sqlConnection")));
+	}
+
+	public static IMvcBuilder AddCustomCSVFormatter(this IMvcBuilder builder)
+	{
+		return builder.AddMvcOptions(config => config.OutputFormatters.Add(new CsvOutputFormatter()));
 	}
 }
