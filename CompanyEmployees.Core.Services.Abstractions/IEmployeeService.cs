@@ -1,10 +1,9 @@
 ﻿using Shared.DataTransferObjects;
 
-namespace CompanyEmployees.Core.Services.Abstractions
+namespace CompanyEmployees.Core.Services.Abstractions;
+
+public interface IEmployeeService
 {
-	public interface IEmployeeService
-	{
-		IEnumerable<EmployeeDto> GetEmployees(Guid companyId, bool trackChanges);
-		EmployeeDto GetEmployee(Guid companyId, Guid id, bool trackChanges); 
-	}
+	IEnumerable<EmployeeDto> GetEmployees(Guid companyId, bool trackChanges);
+	EmployeeDto GetEmployee(Guid companyId, Guid id, bool trackChanges); 
 }

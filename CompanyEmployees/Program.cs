@@ -27,6 +27,7 @@ var app = builder.Build();
 
 //var logger = app.Services.GetRequiredService<ILoggerManager>();
 //app.ConfigureExceptionHandler(logger);
+
 app.UseExceptionHandler(opt => { });
 
 if (app.Environment.IsProduction())
