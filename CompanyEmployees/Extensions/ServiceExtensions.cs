@@ -2,45 +2,49 @@
 using CompanyEmployees.Core.Services;
 using CompanyEmployees.Core.Services.Abstractions;
 using CompanyEmployees.Infrastructure.Persistence;
+using LoggingService;
 using Microsoft.EntityFrameworkCore;
 
-namespace CompanyEmployees.Extensions
+namespace CompanyEmployees.Extensions;
+
+public static class ServiceExtensions
 {
-	public static class ServiceExtensions
+	public static void ConfigureCors(this IServiceCollection services)
 	{
-		public static void ConfigureCors(this IServiceCollection services)
+		services.AddCors(options =>
 		{
-			services.AddCors(options =>
-			{
-				options.AddPolicy("CorsPolicy", builder =>
-					builder.AllowAnyOrigin()
-						.AllowAnyMethod()
-						.AllowAnyHeader());
-			});
-		}
+			options.AddPolicy("CorsPolicy", builder =>
+				builder.AllowAnyOrigin()
+					.AllowAnyMethod()
+					.AllowAnyHeader());
+		});
+	}
 
-		public static void ConfigureIISIntegration(this IServiceCollection services)
+	public static void ConfigureIISIntegration(this IServiceCollection services)
+	{
+		services.Configure<IISOptions>(options =>
 		{
-			services.Configure<IISOptions>(options =>
-			{
 
-			});
-		}
+		});
+	}
+	public static void ConfigureLoggerService(this IServiceCollection services)
+	{
+		services.AddSingleton<ILoggerManager, LoggerManager>();
+	}
 
-		public static void ConfigureRepositoryManager(this IServiceCollection services)
-		{
-			services.AddScoped<IRepositoryManager, RepositoryManager>();
-		}
+	public static void ConfigureRepositoryManager(this IServiceCollection services)
+	{
+		services.AddScoped<IRepositoryManager, RepositoryManager>();
+	}
 
-		public static void ConfigureServiceManager(this IServiceCollection services) 
-		{
-			services.AddScoped<IServiceManager, ServiceManager>();
-		}
+	public static void ConfigureServiceManager(this IServiceCollection services) 
+	{
+		services.AddScoped<IServiceManager, ServiceManager>();
+	}
 
-		public static void ConfigureSqlContext(this IServiceCollection services, IConfiguration configuration)
-		{
-			services.AddDbContext<RepositoryContext>(opts => 
-			opts.UseSqlServer(configuration.GetConnectionString("sqlConnection")));
-		}
+	public static void ConfigureSqlContext(this IServiceCollection services, IConfiguration configuration)
+	{
+		services.AddDbContext<RepositoryContext>(opts => 
+		opts.UseSqlServer(configuration.GetConnectionString("sqlConnection")));
 	}
 }

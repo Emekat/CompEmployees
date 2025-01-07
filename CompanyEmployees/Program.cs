@@ -1,29 +1,38 @@
+using CompanyEmployees;
 using CompanyEmployees.Extensions;
 using Microsoft.AspNetCore.HttpOverrides;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.ConfigureCors();
 builder.Services.ConfigureIISIntegration();
-
-// Add services to the container.
-builder.Services.ConfigureSqlContext(builder.Configuration);
+builder.Services.ConfigureLoggerService();
 builder.Services.ConfigureRepositoryManager();
 builder.Services.ConfigureServiceManager();
-builder.Services.AddControllers();
+builder.Services.ConfigureSqlContext(builder.Configuration);
+builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+
+builder.Services.AddControllers()
+	.AddApplicationPart(typeof(CompanyEmployees.Infrastructure.Presentation.AssemblyReference).Assembly);
+
+builder.Host.UseSerilog((hostContext, configuration) =>
+{
+	configuration.ReadFrom.Configuration(hostContext.Configuration);
+});
 
 var app = builder.Build();
 
+//var logger = app.Services.GetRequiredService<ILoggerManager>();
+//app.ConfigureExceptionHandler(logger);
 
-if (!app.Environment.IsDevelopment())
-{
-	app.UseExceptionHandler("/Error");
+app.UseExceptionHandler(opt => { });
+
+if (app.Environment.IsProduction())
 	app.UseHsts();
-}
-else
-{
-	app.UseDeveloperExceptionPage();
-}
+
 
 // Configure the HTTP request pipeline.
 app.UseHttpsRedirection();

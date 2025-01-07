@@ -1,22 +1,35 @@
-﻿using CompanyEmployees.Core.Domain.Repositories;
+﻿using AutoMapper;
+using CompanyEmployees.Core.Domain.Exceptions;
+using CompanyEmployees.Core.Domain.Repositories;
 using CompanyEmployees.Core.Services.Abstractions;
-using LoggingService;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Shared.DataTransferObjects;
 
-namespace CompanyEmployees.Core.Services
+namespace CompanyEmployees.Core.Services;
+
+public class EmployeeService(IRepositoryManager repository, IMapper mapper) : IEmployeeService
 {
-	public class EmployeeService : IEmployeeService
+	public EmployeeDto GetEmployee(Guid companyId, Guid id, bool trackChanges)
 	{
-		private readonly IRepositoryManager _repository;
-		private readonly ILoggerManager _logger;
-		public EmployeeService(IRepositoryManager repository, ILoggerManager logger)
-		{
-			_repository = repository;
-			_logger = logger;
-		}
+		var company = repository.Company.GetCompany(companyId, trackChanges);
+		if (company is null)
+			throw new CompanyNotFoundException(companyId);
+
+		var employee = repository.Employee.GetEmployee(companyId, id, trackChanges);
+		if (employee is null)
+			throw new EmployeeNotFoundException(id);
+		var employeeDto = mapper.Map<EmployeeDto>(employee);
+		return employeeDto;
+	}
+
+	public IEnumerable<EmployeeDto> GetEmployees(Guid companyId, bool trackChanges)
+	{
+		var company = repository.Company.GetCompany(companyId, trackChanges);
+		if (company is null)
+			throw new CompanyNotFoundException(companyId);
+
+		var employees = repository.Employee.GetEmployees(companyId, trackChanges);
+		var employeesDto = mapper.Map<IEnumerable<EmployeeDto>>(employees);
+
+		return employeesDto;
 	}
 }

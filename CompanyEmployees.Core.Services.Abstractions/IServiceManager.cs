@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace CompanyEmployees.Core.Services.Abstractions;
 
-namespace CompanyEmployees.Core.Services.Abstractions
+public interface IServiceManager
 {
-	public interface IServiceManager
-	{
-		IEmployeeService EmployeeService { get; }
-		ICompanyService CompanyService { get; }
-	}
+	IEmployeeService EmployeeService { get; }
+	ICompanyService CompanyService { get; }
 }

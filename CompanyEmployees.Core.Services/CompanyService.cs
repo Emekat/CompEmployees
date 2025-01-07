@@ -1,19 +1,28 @@
-﻿using CompanyEmployees.Core.Domain.Repositories;
+﻿using AutoMapper;
+using CompanyEmployees.Core.Domain.Exceptions;
+using CompanyEmployees.Core.Domain.Repositories;
 using CompanyEmployees.Core.Services.Abstractions;
-using LoggingService;
-using Microsoft.Extensions.Logging;
+using Shared.DataTransferObjects;
 
-namespace CompanyEmployees.Core.Services
+namespace CompanyEmployees.Core.Services;
+
+public class CompanyService(IRepositoryManager _repository, IMapper _mapper) : ICompanyService
 {
-	public class CompanyService : ICompanyService
-	{
-		private readonly IRepositoryManager _repository;
-		private readonly ILoggerManager _logger;
+	public IEnumerable<CompanyDto> GetAllCompanies(bool trackChanges)
+	{     
+        var companies = _repository.Company.GetAllCompanies(trackChanges);
+        var companiesDto = _mapper.Map<IEnumerable<CompanyDto>>(companies);
+        return companiesDto;
+	}
 
-		public CompanyService(IRepositoryManager repository, ILoggerManager logger)
-		{
-			_repository = repository;
-			_logger = logger;
-		}
+	public CompanyDto GetCompany(Guid id, bool trackChanges)
+	{
+		var company = _repository.Company.GetCompany(id, trackChanges);
+		if (company is null)
+			throw new CompanyNotFoundException(id);
+
+		var companyDto = _mapper.Map<CompanyDto>(company);
+
+		return companyDto;
 	}
 }
