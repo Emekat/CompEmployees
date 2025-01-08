@@ -71,4 +71,5 @@ public class CompanyService(IRepositoryManager _repository, IMapper _mapper) : I
 
 		return (companies: companyCollectionToReturn, ids: ids);
 	}
+
 }
