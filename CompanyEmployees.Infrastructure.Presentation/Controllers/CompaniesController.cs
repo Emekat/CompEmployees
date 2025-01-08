@@ -6,23 +6,23 @@ namespace CompanyEmployees.Infrastructure.Presentation.Controllers;
 
 [Route("api/companies")]
 [ApiController]
-public class CompanyController : ControllerBase
+public class CompaniesController : ControllerBase
 {
 	private readonly IServiceManager _serviceManager;
 
-	public CompanyController(IServiceManager serviceManager)
+	public CompaniesController(IServiceManager serviceManager)
 	{
 		_serviceManager = serviceManager;
 	}
 
 	[HttpGet]
-	public IActionResult GetCompany()
+	public IActionResult GetCompanies()
 	{
 		var companies = _serviceManager.CompanyService.GetAllCompanies(trackChanges: false);
 		return Ok(companies);
 	}
 
-	[HttpGet("{id:guid}", Name = "CompanyId")]
+	[HttpGet("{id:guid}", Name = "CompanyById")]
 	public IActionResult GetCompany(Guid id)
 	{
 		var companies = _serviceManager.CompanyService.GetCompany(id, trackChanges: false);
