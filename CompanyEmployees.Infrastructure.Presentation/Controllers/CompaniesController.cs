@@ -23,9 +23,9 @@ public class CompaniesController : ControllerBase
 	}
 
 	[HttpGet("{id:guid}", Name = "CompanyById")]
-	public IActionResult GetCompany(Guid id)
+	public IActionResult GetCompany(Guid companyId)
 	{
-		var companies = _serviceManager.CompanyService.GetCompany(id, trackChanges: false);
+		var companies = _serviceManager.CompanyService.GetCompany(companyId, trackChanges: false);
 		return Ok(companies);
 	}
 
