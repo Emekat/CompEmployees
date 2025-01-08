@@ -30,4 +30,5 @@ public class EmployeeRepository : RepositoryBase<Employee>, IEmployeeRepository
 			.ToList();
 		return employees;
 	}
+	public void DeleteEmployee(Employee employee) => Delete(employee);
 }
