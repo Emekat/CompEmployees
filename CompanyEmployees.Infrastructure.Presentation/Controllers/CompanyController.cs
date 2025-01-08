@@ -1,5 +1,6 @@
 ﻿using CompanyEmployees.Core.Services.Abstractions;
 using Microsoft.AspNetCore.Mvc;
+using Shared.DataTransferObjects;
 
 namespace CompanyEmployees.Infrastructure.Presentation.Controllers;
 
@@ -14,7 +15,7 @@ public class CompanyController : ControllerBase
 		_serviceManager = serviceManager;
 	}
 
-	[HttpGet]
+	[HttpGet("{id:guid}", Name = "CompanyId")]
 	public IActionResult GetCompany()
 	{
 		var companies = _serviceManager.CompanyService.GetAllCompanies(trackChanges: false);
@@ -26,5 +27,16 @@ public class CompanyController : ControllerBase
 	{
 		var companies = _serviceManager.CompanyService.GetCompany(id, trackChanges: false);
 		return Ok(companies);
+	}
+
+	[HttpPost]
+	public IActionResult CreateCompany([FromBody] CompanyForCreationDto company)
+	{
+		if (company is null)
+			return BadRequest("CompanyForCreationDto object is null");
+
+		var createdCompany = _serviceManager.CompanyService.CreateCompany(company);
+
+		return CreatedAtRoute("CompanyById", new { id = createdCompany.Id }, createdCompany);
 	}
 }
