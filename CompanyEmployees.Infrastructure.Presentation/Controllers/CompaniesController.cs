@@ -55,4 +55,11 @@ public class CompaniesController : ControllerBase
 		var result = _serviceManager.CompanyService.CreateCompanyCollection(companyCollection);
 		return CreatedAtRoute("CompanyCollection", new { result.ids }, result.companies);
 	}
+
+	[HttpDelete("{id:guid}")]
+	public IActionResult DeleteEmployeeForCompany(Guid companyId, Guid id)
+	{
+		_serviceManager.EmployeeService.DeleteEmployeeForCompany(companyId, id, trackChanges: false);
+		return NoContent();
+	}
 }
