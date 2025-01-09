@@ -50,7 +50,7 @@ public class EmployeeService(IRepositoryManager repository, IMapper mapper) : IE
 		return employeesDto;
 	}
 
-	public void DeleteEmployeeForCompany(Guid companyId, Guid id, bool trackChanges) 
+	public void DeleteEmployeeForCompany(Guid companyId, Guid id, bool trackChanges)
 	{
 		var company = repository.Company.GetCompany(companyId, trackChanges);
 		if (company is null)
@@ -60,7 +60,6 @@ public class EmployeeService(IRepositoryManager repository, IMapper mapper) : IE
 		if (employeeForCompany is null)
 			throw new EmployeeNotFoundException(id);
 
-		repository.Employee.DeleteEmployee(employeeForCompany);
-		repository.Save();
+		repository.Employee.DeleteEmployee(company, employeeForCompany);
 	}
 }
