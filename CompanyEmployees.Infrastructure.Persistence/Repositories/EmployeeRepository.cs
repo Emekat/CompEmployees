@@ -30,5 +30,19 @@ public class EmployeeRepository : RepositoryBase<Employee>, IEmployeeRepository
 			.ToList();
 		return employees;
 	}
-	public void DeleteEmployee(Employee employee) => Delete(employee);
+
+	public void DeleteEmployee(Company company, Employee employee)
+	{
+		using var transation = RepositoryContext.Database.BeginTransaction();
+
+		Delete(employee);
+		RepositoryContext.SaveChanges();
+
+		if(FindByCondition(e => e.CompanyId == company.Id, false).Any())
+		{
+			RepositoryContext.Companies!.Remove(company);
+			RepositoryContext.SaveChanges();
+		}
+		transation.Commit();
+	}
 }

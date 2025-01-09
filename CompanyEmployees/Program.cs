@@ -3,7 +3,6 @@ using CompanyEmployees.Extensions;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.ConfigureCors();
